@@ -1,0 +1,187 @@
+import java.awt.Button;
+import java.awt.EventQueue;
+import java.awt.Label;
+import java.awt.List;
+import java.awt.TextField;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class GiaoDien extends JFrame {
+
+	private JPanel contentPane;
+	List list = new List();
+    Canbo cb= new Canbo();
+    TextField textField_1 = new TextField();
+    TextField textField_2 = new TextField();
+    TextField textField_3 = new TextField();
+    public void HienThi() {
+    	int scb= cb.dsma.size();
+    	for(int i=0; i<scb;i++) {
+    		list.add(cb.dsma.get(i));
+    		list.add(cb.dsht.get(i));
+    		list.add(cb.dshsl.get(i).toString());
+    		list.add("------------------------------------------");	
+    		
+    		
+    	}
+    }
+    
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+			try {
+					GiaoDien frame = new GiaoDien();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public GiaoDien() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				try {
+					cb.getCanBo();
+					//HienThi();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		
+		textField_1.setBounds(52, 10, 133, 22);
+		contentPane.add(textField_1);
+		
+		
+		textField_2.setBounds(52, 38, 133, 22);
+		contentPane.add(textField_2);
+		
+		
+		textField_3.setBounds(52, 66, 133, 22);
+		contentPane.add(textField_3);
+		
+		Label label = new Label("MaCB");
+		label.setBounds(5, 10, 62, 22);
+		contentPane.add(label);
+		
+		Label label_1 = new Label("Ho Ten");
+		label_1.setBounds(5, 38, 62, 22);
+		contentPane.add(label_1);
+		
+		Label label_2 = new Label("HSL");
+		label_2.setBounds(5, 66, 62, 22);
+		contentPane.add(label_2);
+		
+		
+		list.setBounds(202, 10, 222, 241);
+		contentPane.add(list);
+		
+		Button Tim = new Button("Tim");
+		Tim.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String st= JOptionPane.showInputDialog("nhap ho ten");
+				int scb=cb.dshsl.size();
+				list.clear();
+				for(int i=0;i<scb;i++) {
+					if(cb.dsht.get(i).toLowerCase().trim().contains(st.trim().toLowerCase())) {
+						list.add(cb.dsma.get(i));
+						list.add(cb.dsht.get(i));
+						list.add(cb.dshsl.get(i).toString());
+						list.add("------------------------");
+					
+					}
+				}
+		    }
+		});
+		Tim.setBounds(22, 196, 70, 22);
+		contentPane.add(Tim);
+		
+		Button Sua = new Button("Sua");
+		Sua.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				cb.Sua(textField_1.getText(), textField_2.getText(),Double.parseDouble(textField_3.getText()));
+				}
+		});
+		Sua.setBounds(115, 158, 70, 22);
+		contentPane.add(Sua);
+		
+		Button Xoa = new Button("Xoa");
+		Xoa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String st= JOptionPane.showInputDialog("nhap can xoa");
+				cb.Xoa(st);
+			}
+			
+		});
+		Xoa.setBounds(115, 114, 70, 22);
+		contentPane.add(Xoa);
+		
+		Button Luu = new Button("Luu");
+		Luu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					cb.LuuFile();
+					JOptionPane.showMessageDialog(null,"Da luu vao file");
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}); 
+		Luu.setBounds(115, 196, 70, 22);
+		contentPane.add(Luu);
+		
+		Button Them = new Button("Them");
+		Them.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					if(cb.KiemTra(textField_1.getText()).equals("yes"))
+						JOptionPane.showMessageDialog(null,"Ma ban vua nhap da trung\nNhan ok de nhap lai");
+					else {
+					cb.Them(textField_1.getText(),textField_2.getText(),Double.parseDouble(textField_3.getText()));
+					JOptionPane.showMessageDialog(null,"Da Them can bo");
+					}
+					textField_1.setText("");
+					textField_1.setFocusable(true);
+					textField_2.setText("");
+					textField_2.setFocusable(true);
+					textField_3.setText("");
+					textField_3.setFocusable(true);
+				}catch(Exception e) {
+				e.printStackTrace();
+				}
+			}
+		});
+		Them.setBounds(22, 114, 70, 22);
+		contentPane.add(Them);
+		
+		Button HienThi = new Button("HienThi");
+		HienThi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+               HienThi();
+			}
+		});
+		HienThi.setBounds(22, 158, 70, 22);
+		contentPane.add(HienThi);
+	}
+}
